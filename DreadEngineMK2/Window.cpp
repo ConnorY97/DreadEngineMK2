@@ -33,6 +33,11 @@ Window::Window()
     auto major = ogl_GetMajorVersion();
     auto minor = ogl_GetMinorVersion();
     printf("Running GL Version: %i.%i\n", major, minor);
+
+    //Clearing the screen to a specific colour before starting the game loop
+    glClearColor(0.25f, 0.25f, 0.25f, 1); 
+    //Enable the depth buffer
+    glEnable(GL_DEPTH_TEST); 
     
 }
 

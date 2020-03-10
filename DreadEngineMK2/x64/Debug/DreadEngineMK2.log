@@ -1,0 +1,6 @@
+﻿  gl_core_4_5.c
+  DreadEngineMK2.cpp
+C:\Users\s182351\Desktop\DreadEngineMK2\DreadEngineMK2\DreadEngineMK2.cpp(2,10): fatal error C1083: Cannot open include file: 'gl_core_4_5.h': No such file or directory
+  Window.cpp
+C:\Users\s182351\Desktop\DreadEngineMK2\DreadEngineMK2\Window.h(2,10): fatal error C1083: Cannot open include file: 'gl_core_4_5.h': No such file or directory
+  Generating Code...

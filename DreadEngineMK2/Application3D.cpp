@@ -4,7 +4,7 @@ int windowWidth, windowHeight;
 
 //OpneGL functions have to s
 void framebufferSizeCallBack(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
+
 
 
 
@@ -74,12 +74,3 @@ void framebufferSizeCallBack(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-void processInput(GLFWwindow* window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    {
-        glfwSetWindowShouldClose(window, true);
-        std::cout << "Exited with key" << std::endl;
-    }
-
-}

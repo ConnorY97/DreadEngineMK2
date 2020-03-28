@@ -20,7 +20,11 @@ int main()
 
     Shader* m_simpleShader = new Shader("../Shaders/vert_shader.shader", "../Shaders/frag_shader.shader"); 
 
-    
+    glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+    glm::mat4 trans = glm::mat4(1.0f);
+    trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
+    vec = trans * vec;
+    std::cout << vec.x << vec.y << vec.z << std::endl;
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -58,9 +62,10 @@ int main()
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
+
     // load and create a texture 
-  // -------------------------
-    unsigned int texture;
+    // -------------------------
+    unsigned int texture, texture2;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
     // set the texture wrapping parameters
@@ -71,6 +76,8 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // load image, create texture and generate mipmaps
     int width, height, nrChannels;
+    //Flipping textures the right way up 
+    stbi_set_flip_vertically_on_load(true);
     unsigned char* data = stbi_load("../Images/container.jpg", &width, &height, &nrChannels, 0);
     if (data)
     {
@@ -81,8 +88,39 @@ int main()
     {
         std::cout << "Failed to load texture" << std::endl;
     }
+    //Memory cleaning 
+    stbi_image_free(data);
+    // texture 2
+   // ---------
+    glGenTextures(1, &texture2);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    // set the texture wrapping parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // set texture filtering parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // load image, create texture and generate mipmaps
+    data = stbi_load("../Images/awesomeface.png", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
     stbi_image_free(data);
 
+    // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
+    // -------------------------------------------------------------------------------------------
+    m_simpleShader->Use(); // don't forget to activate/use the shader before setting uniforms!
+    // either set it manually like so:
+    m_simpleShader->setInt("texture1", 0);
+    // or set it via the texture class
+    m_simpleShader->setInt("texture2", 1);
 
 
     //Note that this is allowed, the call to glVertexAttribPointer registered VBO
@@ -93,7 +131,7 @@ int main()
     glBindVertexArray(0); 
 
 
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT, GL_FILL);
 
 
     //Clearing the screen to a specific colour before starting the game loop 
@@ -115,8 +153,11 @@ int main()
             //DEPTH-BUFFER informs it to clear the distance to the closest pixel. To make sure it displays the new image 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        //Bind the texture 
-        glBindTexture(GL_TEXTURE_2D, texture); 
+        //Bind the texture on corrisponding texture units 
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture2);
 
         //Draw out first tranle 
         m_simpleShader->Use(); 

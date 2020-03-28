@@ -20,11 +20,7 @@ int main()
 
     Shader* m_simpleShader = new Shader("../Shaders/vert_shader.shader", "../Shaders/frag_shader.shader"); 
 
-    glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-    glm::mat4 trans = glm::mat4(1.0f);
-    trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
-    vec = trans * vec;
-    std::cout << vec.x << vec.y << vec.z << std::endl;
+
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -122,6 +118,8 @@ int main()
     // or set it via the texture class
     m_simpleShader->setInt("texture2", 1);
 
+    
+
 
     //Note that this is allowed, the call to glVertexAttribPointer registered VBO
     //as the vertex attribute's bound vertex buffer object so afterwards
@@ -158,6 +156,14 @@ int main()
         glBindTexture(GL_TEXTURE_2D, texture);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
+
+        //Moving the box to the bottom right of the scree and rotating it 
+        glm::mat4 trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        //Change the roation and scale of the box
+        m_simpleShader->setMat4("transform", trans);
+
 
         //Draw out first tranle 
         m_simpleShader->Use(); 

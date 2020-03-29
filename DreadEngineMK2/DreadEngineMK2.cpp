@@ -26,9 +26,8 @@ int main()
 
     TextureManger* m_texMan = new TextureManger(); 
     m_texMan->loadTexture("../Images/container.jpg"); 
-    std::cout << m_texMan->arraySize() << std::endl;
     m_texMan->loadTexture("../Images/awesomeface.png");
-    std::cout << m_texMan->arraySize() << std::endl;
+    
 
 
 #pragma region Shape
@@ -122,6 +121,7 @@ int main()
     
 #pragma endregion
 
+
     // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
     // -------------------------------------------------------------------------------------------
     m_simpleShader->Use(); // don't forget to activate/use the shader before setting uniforms!
@@ -210,7 +210,6 @@ int main()
     glDeleteBuffers(1, &EBO);
     ////This cleans up all the memory 
     //    //Including the GLFWwindow pointer that I created 
-    //glfwTerminate();
     delete m_texMan;
     m_texMan = nullptr;
     delete m_simpleShader;
@@ -219,6 +218,7 @@ int main()
     app3D = nullptr;
     delete m_camera;
     m_camera = nullptr;
+    glfwTerminate();
     return 0; 
 }
 

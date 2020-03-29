@@ -7,6 +7,7 @@
 #include "Shader.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include "FlyCamera.h"
 
 void processInput(GLFWwindow* window);
 
@@ -21,6 +22,8 @@ int main()
 
 
     Shader* m_simpleShader = new Shader("../Shaders/vert_shader.shader", "../Shaders/frag_shader.shader"); 
+
+    FlyCamera* m_camera = new FlyCamera(); 
 
 
 #pragma region Shape
@@ -197,13 +200,20 @@ int main()
     glClearColor(0.25f, 0.25f, 0.25f, 1);
     //Enable the depth buffer 
     glEnable(GL_DEPTH_TEST);
-
+    ULONGLONG previous = GetTickCount64();
     //Render loop------------------------------------------------------------------
         //Checks if the window has been told to close at the start of each loop 
     while (!glfwWindowShouldClose(app3D->currentContext()))
     {
         //Input check 
         processInput(app3D->currentContext());
+
+        //Delta Time
+        ULONGLONG now = GetTickCount64();
+        float delta_time = float(now - previous) / 1000.0f;
+        previous = now;
+
+        m_camera->update(delta_time);
 
         //Rendering------------------------
 
@@ -224,14 +234,14 @@ int main()
         projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
         // pass transformation matrices to the shader
-        m_simpleShader->setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+        m_simpleShader->setMat4("projection", m_camera->get_projection_view()); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
         m_simpleShader->setMat4("view", view);
 
         glBindVertexArray(VAO);
 
-        for (unsigned int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++)
         {
-            glm::mat4 model = glm::mat4(1.0f);
+            glm::mat4 model = glm::mat4(1.0f);            
             model = glm::translate(model, cubePositions[i]);
             float angle = 20.0f * i;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
@@ -260,6 +270,8 @@ int main()
     m_simpleShader = nullptr;
     delete app3D;
     app3D = nullptr;
+    delete m_camera;
+    m_camera = nullptr;
     return 0; 
 }
 

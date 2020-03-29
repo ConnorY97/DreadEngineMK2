@@ -10,6 +10,8 @@
 
 void processInput(GLFWwindow* window);
 
+const unsigned int SCR_WIDTH = 1280;
+const unsigned int SCR_HEIGHT = 720;
 
 int main()
 {
@@ -21,20 +23,71 @@ int main()
     Shader* m_simpleShader = new Shader("../Shaders/vert_shader.shader", "../Shaders/frag_shader.shader"); 
 
 
-
+#pragma region Shape
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     float vertices[] = {
         // positions          // colors           // texture coords
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right      0
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right   1
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left    2
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left       3
+        -0.5f, -0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 0.0f,
+                 
+        -0.5f, -0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 0.0f,
+                  
+        -0.5f,  0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 0.0f,
+                    
+         0.5f,  0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 0.0f,
+                     
+        -0.5f, -0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 1.0f,
+          
+        -0.5f,  0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.1f, 0.1f, 0.1f,   0.0f, 1.0f
     };
     unsigned int indices[] = {
         0, 1, 3, // first triangle
         1, 2, 3  // second triangle
     };
+    glm::vec3 cubePositions[] =
+    {
+        glm::vec3(0.0f,  0.0f,  0.0f),
+        glm::vec3(2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3(2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3(1.3f, -2.0f, -2.5f),
+        glm::vec3(1.5f,  2.0f, -2.5f),
+        glm::vec3(1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
+
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -58,9 +111,12 @@ int main()
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
+    
+#pragma endregion
 
+#pragma region Texture
     // load and create a texture 
-    // -------------------------
+   // -------------------------
     unsigned int texture, texture2;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
@@ -109,6 +165,11 @@ int main()
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
+#pragma endregion
+
+
+
+   
 
     // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
     // -------------------------------------------------------------------------------------------
@@ -135,21 +196,21 @@ int main()
     //Clearing the screen to a specific colour before starting the game loop 
     glClearColor(0.25f, 0.25f, 0.25f, 1);
     //Enable the depth buffer 
-    //glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
 
     //Render loop------------------------------------------------------------------
         //Checks if the window has been told to close at the start of each loop 
     while (!glfwWindowShouldClose(app3D->currentContext()))
     {
         //Input check 
-        processInput(app3D->currentContext()); 
+        processInput(app3D->currentContext());
 
         //Rendering------------------------
 
         //Clearing the screen at the start of every loop 
             //COLOR_BUFFER informs OpenGL to wipe the back-buffer colours clean 
             //DEPTH-BUFFER informs it to clear the distance to the closest pixel. To make sure it displays the new image 
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //Bind the texture on corrisponding texture units 
         glActiveTexture(GL_TEXTURE0);
@@ -157,21 +218,30 @@ int main()
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
 
-        //Moving the box to the bottom right of the scree and rotating it 
-        glm::mat4 trans = glm::mat4(1.0f);
-        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-        //Change the roation and scale of the box
-        m_simpleShader->setMat4("transform", trans);
+        // create transformations
+        glm::mat4 view = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+        glm::mat4 projection = glm::mat4(1.0f);
+        projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        // pass transformation matrices to the shader
+        m_simpleShader->setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+        m_simpleShader->setMat4("view", view);
 
-
-        //Draw out first tranle 
-        m_simpleShader->Use(); 
         glBindVertexArray(VAO);
-        //REMEBER
-            //If using an EBO you must use gldrawelements so that they are drawn in the correct order 
-            //or you will get weird errors like only half of the rectangle being drawn 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        for (unsigned int i = 0; i < 10; i++)
+        {
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, cubePositions[i]);
+            float angle = 20.0f * i;
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            m_simpleShader->setMat4("model", model);
+            //REMEBER
+                //If using an EBO you must use gldrawelements so that they are drawn in the correct order 
+                //or you will get weird errors like only half of the rectangle being drawn 
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+        
 
         //Swap buffers so that there isn't any dragging 
         glfwSwapBuffers(app3D->currentContext());

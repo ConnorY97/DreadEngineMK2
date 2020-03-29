@@ -7,10 +7,12 @@
 
 TextureManger::~TextureManger()
 {
-	for (int i = m_textures.size() - 1; i > 0; i)
+	//When removing elements from the list you want to go down 
+		//So set i to the variable and set i greather than 0
+	for (int i = 0; i < m_textures.size(); i++)
 	{
-		delete m_textures[i]; 
-		m_textures[i] = nullptr; 
+		delete m_textures[i];
+		m_textures[i] = nullptr;
 	}
 }
 

@@ -1,8 +1,10 @@
 #pragma once
-
+#include "gl_core_4_5.h"
 class Texture
 {
 public:
+	~Texture(); 
+
 	unsigned int getPos() { return m_pos; }
 	void setPos(unsigned int pos) { m_pos = pos; }
 

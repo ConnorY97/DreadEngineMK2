@@ -6,6 +6,7 @@ class TextureManger
 {
 public:
 	~TextureManger(); 
+
 	void loadTexture(const char* filePath); 
 
 	int arraySize() { return m_textures.size() - 1; }

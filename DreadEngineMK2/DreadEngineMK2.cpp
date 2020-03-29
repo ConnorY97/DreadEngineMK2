@@ -5,9 +5,8 @@
 #include "glm.hpp"
 #include "Application3D.h"
 #include "Shader.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
 #include "FlyCamera.h"
+#include "TextureManger.h";
 
 void processInput(GLFWwindow* window);
 
@@ -24,6 +23,11 @@ int main()
     Shader* m_simpleShader = new Shader("../Shaders/vert_shader.shader", "../Shaders/frag_shader.shader"); 
 
     FlyCamera* m_camera = new FlyCamera(); 
+
+    TextureManger* m_texMan = new TextureManger(); 
+    m_texMan->loadTexture("../Images/container.jpg"); 
+    m_texMan->loadTexture("../Images/awesomeface.png");
+    
 
 
 #pragma region Shape
@@ -117,62 +121,6 @@ int main()
     
 #pragma endregion
 
-#pragma region Texture
-    // load and create a texture 
-   // -------------------------
-    unsigned int texture, texture2;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
-    // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load image, create texture and generate mipmaps
-    int width, height, nrChannels;
-    //Flipping textures the right way up 
-    stbi_set_flip_vertically_on_load(true);
-    unsigned char* data = stbi_load("../Images/container.jpg", &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    //Memory cleaning 
-    stbi_image_free(data);
-    // texture 2
-   // ---------
-    glGenTextures(1, &texture2);
-    glBindTexture(GL_TEXTURE_2D, texture2);
-    // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load image, create texture and generate mipmaps
-    data = stbi_load("../Images/awesomeface.png", &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
-#pragma endregion
-
-
-
-   
 
     // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
     // -------------------------------------------------------------------------------------------
@@ -181,10 +129,7 @@ int main()
     m_simpleShader->setInt("texture1", 0);
     // or set it via the texture class
     m_simpleShader->setInt("texture2", 1);
-
     
-
-
     //Note that this is allowed, the call to glVertexAttribPointer registered VBO
     //as the vertex attribute's bound vertex buffer object so afterwards
     //we can safely unbind
@@ -224,9 +169,9 @@ int main()
 
         //Bind the texture on corrisponding texture units 
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture);
+        glBindTexture(GL_TEXTURE_2D, m_texMan->getPos(0));
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture2);
+        glBindTexture(GL_TEXTURE_2D, m_texMan->getPos(1));
 
         // create transformations
         glm::mat4 view = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
@@ -265,13 +210,15 @@ int main()
     glDeleteBuffers(1, &EBO);
     ////This cleans up all the memory 
     //    //Including the GLFWwindow pointer that I created 
-    //glfwTerminate();
+    delete m_texMan;
+    m_texMan = nullptr;
     delete m_simpleShader;
     m_simpleShader = nullptr;
     delete app3D;
     app3D = nullptr;
     delete m_camera;
     m_camera = nullptr;
+    glfwTerminate();
     return 0; 
 }
 

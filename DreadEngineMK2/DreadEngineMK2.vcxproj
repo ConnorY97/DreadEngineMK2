@@ -156,6 +156,8 @@
     <ClCompile Include="DreadEngineMK2.cpp" />
     <ClCompile Include="FlyCamera.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureManger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application3D.h" />
@@ -163,6 +165,8 @@
     <ClInclude Include="FlyCamera.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureManger.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\frag_shader.shader" />

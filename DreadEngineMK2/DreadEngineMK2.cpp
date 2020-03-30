@@ -7,6 +7,7 @@
 #include "Shader.h"
 #include "FlyCamera.h"
 #include "TextureManger.h";
+#include "MeshManager.h"
 
 void processInput(GLFWwindow* window);
 
@@ -28,6 +29,8 @@ int main()
     m_texMan->loadTexture("../Images/container.jpg"); 
     m_texMan->loadTexture("../Images/awesomeface.png");
     
+    MeshManager* m_meshMan = new MeshManager();
+    m_meshMan->makeUntexCube(glm::vec3(0.0f), glm::vec3(20.0f, 10.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.f));
 
 
 #pragma region Shape
@@ -95,28 +98,28 @@ int main()
         glm::vec3(-1.3f,  1.0f, -1.5f)
     };
 
-    unsigned int VBO, VAO, EBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+    //unsigned int VBO, VAO, EBO;
+    //glGenVertexArrays(1, &VAO);
+    //glGenBuffers(1, &VBO);
+    //glGenBuffers(1, &EBO);
 
-    glBindVertexArray(VAO);
+    //glBindVertexArray(VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    //glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    // texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
+    //// position attribute
+    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    //glEnableVertexAttribArray(0);
+    //// color attribute
+    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    //glEnableVertexAttribArray(1);
+    //// texture coord attribute
+    //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    //glEnableVertexAttribArray(2);
 
     
 #pragma endregion
@@ -133,9 +136,9 @@ int main()
     //Note that this is allowed, the call to glVertexAttribPointer registered VBO
     //as the vertex attribute's bound vertex buffer object so afterwards
     //we can safely unbind
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    /*glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    glBindVertexArray(0); 
+    glBindVertexArray(0); */
 
 
     glPolygonMode(GL_FRONT, GL_FILL);
@@ -173,29 +176,31 @@ int main()
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, m_texMan->getPos(1));
 
-        // create transformations
-        glm::mat4 view = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-        glm::mat4 projection = glm::mat4(1.0f);
-        projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-        // pass transformation matrices to the shader
-        m_simpleShader->setMat4("projection", m_camera->get_projection_view()); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-        m_simpleShader->setMat4("view", view);
+        m_meshMan->draw(m_simpleShader); 
 
-        glBindVertexArray(VAO);
+        //// create transformations
+        //glm::mat4 view = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+        //glm::mat4 projection = glm::mat4(1.0f);
+        //projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        //view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        //// pass transformation matrices to the shader
+        //m_simpleShader->setMat4("projection", m_camera->get_projection_view()); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+        //m_simpleShader->setMat4("view", view);
 
-        for (int i = 0; i < 10; i++)
-        {
-            glm::mat4 model = glm::mat4(1.0f);            
-            model = glm::translate(model, cubePositions[i]);
-            float angle = 20.0f * i;
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            m_simpleShader->setMat4("model", model);
-            //REMEBER
-                //If using an EBO you must use gldrawelements so that they are drawn in the correct order 
-                //or you will get weird errors like only half of the rectangle being drawn 
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        //glBindVertexArray(VAO);
+
+        //for (int i = 0; i < 10; i++)
+        //{
+        //    glm::mat4 model = glm::mat4(1.0f);            
+        //    model = glm::translate(model, cubePositions[i]);
+        //    float angle = 20.0f * i;
+        //    model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+        //    m_simpleShader->setMat4("model", model);
+        //    //REMEBER
+        //        //If using an EBO you must use gldrawelements so that they are drawn in the correct order 
+        //        //or you will get weird errors like only half of the rectangle being drawn 
+        //    glDrawArrays(GL_TRIANGLES, 0, 36);
+        //}
         
 
         //Swap buffers so that there isn't any dragging 
@@ -205,13 +210,15 @@ int main()
     }
     //-----------------------------------------------------------------------------
 
-    glDeleteVertexArrays(1, &VAO);
+    /*glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+    glDeleteBuffers(1, &EBO);*/
     ////This cleans up all the memory 
     //    //Including the GLFWwindow pointer that I created 
     delete m_texMan;
     m_texMan = nullptr;
+    delete m_meshMan;
+    m_meshMan = nullptr;
     delete m_simpleShader;
     m_simpleShader = nullptr;
     delete app3D;

@@ -54,9 +54,9 @@ void MeshManager::makeUntexCube(glm::vec3 size, glm::vec3 pos, glm::vec3 colour)
 	//Creating the mesh 
 	unsigned int VAO, VBO, EBO; 
 
+	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
-	glGenVertexArrays(1, &VAO);
 
 	glBindVertexArray(VAO);
 

@@ -1,21 +1,40 @@
-#include "Mesh.h"
-
-
-Mesh::~Mesh()
-{
-	glDeleteVertexArrays(1, &m_VAO);
-	glDeleteBuffers(1, &m_VBO);
-	glDeleteBuffers(1, &m_EBO);
-}
-
-void Mesh::setVertexArrays(unsigned int VAO, unsigned int VBO, unsigned int EBO)
-{
-	m_VAO = VAO;
-	m_VBO = VBO;
-	m_EBO = EBO; 
-}
-
-void Mesh::bind()
-{
-	glBindVertexArray(m_VAO); 
-}
+//#include "Mesh.h"
+//#include <vector>
+//
+//#include "Shader.h"
+//
+//Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
+//{
+//	/*this->m_vertices = vertices;
+//	this->m_indices = indices;
+//	this->m_textures = textures;
+//
+//	setupMesh(); */
+//}
+//
+//void Mesh::setupMesh()
+//{
+//    //glGenVertexArrays(1, &m_VAO);
+//    //glGenBuffers(1, &m_VBO);
+//    //glGenBuffers(1, &m_EBO);
+//
+//    //glBindVertexArray(m_VAO);
+//    //glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+//
+//    //glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_STATIC_DRAW);
+//
+//    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+//    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW);
+//
+//    //// vertex positions
+//    //glEnableVertexAttribArray(0);
+//    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+//    //// vertex normals
+//    //glEnableVertexAttribArray(1);
+//    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, norm));
+//    //// vertex texture coords
+//    //glEnableVertexAttribArray(2);
+//    //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
+//
+//    //glBindVertexArray(0);
+//}

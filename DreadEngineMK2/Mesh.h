@@ -2,51 +2,64 @@
 #include <vector>
 #include "glm.hpp"
 #include "gl_core_4_5.h"
+#include <string>
 
-struct Vertex
-{
-	Vertex(glm::vec3 aVertex, glm::vec2 aColour)
-	{
-		vertex = aVertex;
-		colour = aColour; 
-		texCoord = glm::vec2(0.0f);
-	}
-	Vertex(glm::vec3 aVertex, glm::vec2 aColour, glm::vec3 aTexCoord)
-	{
-		vertex = aVertex;
-		colour = aColour;
-		texCoord = aTexCoord;
-	}
-	glm::vec3 vertex;
-	glm::vec2 colour;
-	glm::vec2 texCoord;
-};
+class Shader;
+//
+//struct Vertex
+//{
+//	glm::vec3 pos;
+//	glm::vec3 norm;
+//	glm::vec2 texCoords;
+//};
+//
+//struct Texture
+//{
+//	unsigned int ID;
+//	std::string type; 
+//};
 
 class Mesh
 {
 public:
-	~Mesh(); 
+    /*  Mesh Data  */
+    //std::vector<Vertex> m_vertices;
+    //std::vector<unsigned int> m_indices;
+    //std::vector<Texture> m_textures;
+    /*  Functions  */
+    //Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+    //void Draw(Shader shader);
 
-	void setVertexArrays(unsigned int VAO, unsigned int VBO, unsigned int EBO);
-	
-	void setPos(glm::vec3 pos) { m_pos = pos; }
-	glm::vec3 getPos() { return m_pos; }
+    void setVertexArrays(unsigned int VAO, unsigned int VBO, unsigned int EBO)
+    {
+        m_VAO = VAO;
+        m_VBO = VBO;
+        m_EBO = EBO;
+    }
 
-	void setScale(glm::vec3 scale) { m_scale = scale; }
-	glm::vec3 getScale() { return m_scale; }
+    void setPos(glm::vec3 pos) { m_pos = pos; }
+    void setScale(glm::vec3 scale) { m_scale = scale; }
+    void setIncicesAmount(int indicies) { indicesAmount = indicies; }
 
-	void setIncicesAmount(unsigned int indicesamount) { m_indicesAmount = indicesamount; }
-	unsigned int getIndicesAmount() { return m_indicesAmount; }
+    void bind()
+    {
+        glBindVertexArray(m_VAO); 
+    }
 
-	unsigned int getVAO() { return m_VAO; }
-	unsigned int getEBO() { return m_EBO; }
+    glm::vec3 getPos() { return m_pos; }
 
-	void bind(); 
+    int getIndicesAmount() { return indicesAmount; }
 
-protected:
-	unsigned int m_VAO, m_VBO, m_EBO;
-	glm::vec3 m_pos; 
-	glm::vec3 m_scale; 
-	unsigned int m_indicesAmount; 
+    
+private:
+    /*  Render data  */
+    unsigned int m_VAO, m_VBO, m_EBO;
+    /*  Functions    */
+    //void setupMesh();
+
+    glm::vec3 m_pos;
+    glm::vec3 m_scale; 
+    int indicesAmount; 
+
 };
 

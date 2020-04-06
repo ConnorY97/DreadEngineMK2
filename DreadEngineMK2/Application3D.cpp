@@ -61,7 +61,7 @@ int Application3D::startUp(int width, int height, const char* name)
     auto minor = ogl_GetMinorVersion();
     printf("GL: %i.%i\n", major, minor);
 
-   
+    return 0;
 }
 
 void framebufferSizeCallBack(GLFWwindow* window, int width, int height)

@@ -3,6 +3,8 @@
 #include <vector>
 #include "Shader.h"
 
+std::string GetGLError();
+
 class MeshManager
 {
 public:
